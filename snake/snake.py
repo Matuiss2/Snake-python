@@ -7,7 +7,7 @@
 # V 1.32 - Changed the variable name fps to speed to avoid confusion, few performance improvements(direction, sounds)
 # V 1.38 - Performance boost by changing most of the lists to deque, O(1) vs the previous O(n)
 """
-todo Complete menu skeleton,add difficult settings,add another music options,add buttons,putting the sfx on py folder
+todo Complete menu skeleton,add difficult settings,add another music options,add buttons
 """
 import pygame
 import sys
@@ -15,6 +15,7 @@ import time
 import random
 import collections
 import itertools
+import os
 
 
 def main():
@@ -55,12 +56,15 @@ def main():
     def game_sound(s):
         """ Include the game sfx and music"""
         if s == 0:
-            pygame.mixer.music.load("background.ogg")
+            directory = os.path.dirname("background.ogg")
+            pygame.mixer.music.load(os.path.join(directory, "background.ogg"))
             pygame.mixer.music.play(-1)
         elif s == 1:
-            pygame.mixer.Sound("eating.wav").play()
+            directory = os.path.dirname("eating.wav")
+            pygame.mixer.Sound(os.path.join(directory,"eating.wav")).play()
         elif s == 2:
-            pygame.mixer.Sound("game-over.wav").play()
+            directory = os.path.dirname("game-over.wav")
+            pygame.mixer.Sound(os.path.join(directory, "game-over.wav")).play()
 
     def you_lose():
         """ When the players loses, it will show a red message in times new
