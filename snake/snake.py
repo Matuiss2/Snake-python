@@ -6,6 +6,7 @@
 # V 1.26 - Adds menu skeleton, changes the background color to light gray to avoid confusion with the taskbar
 # V 1.32 - Changed the variable name fps to speed to avoid confusion, few performance improvements(direction, sounds)
 # V 1.38 - Performance boost by changing most of the lists to deque, O(1) vs the previous O(n)
+# V 1.48 - BugFix, relative paths
 """
 todo Complete menu skeleton,add difficult settings,add another music options,add buttons
 """
@@ -56,15 +57,18 @@ def main():
     def game_sound(s):
         """ Include the game sfx and music"""
         if s == 0:
-            directory = os.path.dirname("background.ogg")
-            pygame.mixer.music.load(os.path.join(directory, "background.ogg"))
+            directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+            full_path = os.path.join(directory, "background.ogg")
+            pygame.mixer.music.load(full_path)
             pygame.mixer.music.play(-1)
         elif s == 1:
-            directory = os.path.dirname("eating.wav")
-            pygame.mixer.Sound(os.path.join(directory,"eating.wav")).play()
+            directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+            full_path = os.path.join(directory, "eating.wav")
+            pygame.mixer.Sound(full_path).play()
         elif s == 2:
-            directory = os.path.dirname("game-over.wav")
-            pygame.mixer.Sound(os.path.join(directory, "game-over.wav")).play()
+            directory = os.path.dirname(os.path.realpath(sys.argv[0]))
+            full_path = os.path.join(directory, "game-over.wav")
+            pygame.mixer.Sound(full_path).play()
 
     def you_lose():
         """ When the players loses, it will show a red message in times new
@@ -145,8 +149,8 @@ def main():
         pygame.draw.rect(player_screen, orange, pygame.Rect(food_position[0], food_position[1], 10, 10))
         if snake_position[0] not in range(0, 711) or snake_position[1] not in range(0, 451):
             you_lose()  # Game over when the Snake hit a wall
-        for block in itertools.islice(snake_body, 1, len(snake_body) - 1):
-            if snake_position == block:
+        for block in itertools.islice(snake_body, 1, None):
+            if snake_position == collections.deque(block):
                 you_lose()  # Game over when the Snake hits itself
         pygame.display.flip()  # It constantly updates the screen
         speed.tick(26)  # It sets the speed to a playable value
