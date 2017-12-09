@@ -17,4 +17,4 @@ V 1.32 - Changed the variable name fps to speed to avoid confusion, few performa
 
 V 1.38 - Performance boost by changing most of the lists to deque, O(1) vs the previous O(n)
 
-todo - Complete menu skeleton, add difficult settings, add another music options, add buttons, putting the sfx on py folder
+todo - Complete menu skeleton, add difficult settings, add another music options, add buttons, making the path to the songs relative( Im still failing at that)
