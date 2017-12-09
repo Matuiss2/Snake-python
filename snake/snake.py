@@ -33,7 +33,7 @@ def main():
     black = pygame.Color("black")
     orange = pygame.Color("orange")
     grey = pygame.Color("light grey")
-    
+
     # Game surface
     player_screen = pygame.display.set_mode((720, 460))  # Set screen size
     pygame.display.set_caption("Snake v.1.38")  # Set screen title and version
@@ -55,12 +55,12 @@ def main():
     def game_sound(s):
         """ Include the game sfx and music"""
         if s == 0:
-            pygame.mixer.music.load("C:\\Users\\MBAA\\Music\\sound effects\\background.ogg")
+            pygame.mixer.music.load("background.ogg")
             pygame.mixer.music.play(-1)
         elif s == 1:
-            pygame.mixer.Sound("C:\\Users\\MBAA\\Music\\sound effects\\eating.wav").play()
+            pygame.mixer.Sound("eating.wav").play()
         elif s == 2:
-            pygame.mixer.Sound("C:\\Users\\MBAA\\Music\\sound effects\\game-over.wav").play()
+            pygame.mixer.Sound("game-over.wav").play()
 
     def you_lose():
         """ When the players loses, it will show a red message in times new
@@ -149,4 +149,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()
