@@ -1,6 +1,14 @@
 # Snake-python
 Small, snake game in python that i ll improve sporadically 
 
+Requirements:
+
+-pygame library
+
+-python 3.x
+
+
+
 V 1.0 - functional game
 
 V 1.06 - Improves the readability, improves slightly the performance
