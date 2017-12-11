@@ -7,8 +7,9 @@
 # V 1.32 - Changed the variable name fps to speed to avoid confusion, few performance improvements(direction, sounds)
 # V 1.38 - Performance boost by changing most of the lists to deque, O(1) vs the previous O(n)
 # V 1.48 - BugFix, relative paths
+# V 1.57 - Adds pause/ unpausing (pressing p), code slightly more readable
 """
-todo Complete menu skeleton,add difficult settings,add another music options,add buttons
+todo Make a pause menu, Make a initial menu,add difficult settings,add another music options,add buttons, add tutorials
 """
 import pygame
 import sys
@@ -20,10 +21,10 @@ import os
 
 
 def main():
-    """Snake v 1.38"""
+    """Snake v 1.57"""
     score = 0  # Initial score
     speed = pygame.time.Clock()
-    direction = "RIGHT"  # Initial direction
+    direction = "R"  # Initial direction
     snake_position = collections.deque([100, 50])  # Initial snake position
     snake_body = collections.deque([[100, 50], [90, 50], [100, 50]])  # Initial snake body
     # It places the food randomly, excluding the border
@@ -35,7 +36,6 @@ def main():
     black = pygame.Color("black")
     orange = pygame.Color("orange")
     grey = pygame.Color("light grey")
-
     # Game surface
     player_screen = pygame.display.set_mode((720, 460))  # Set screen size
     pygame.display.set_caption("Snake v.1.38")  # Set screen title and version
@@ -100,60 +100,69 @@ def main():
 
     initializer()
     game_sound(0)
+    paused = False
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quiting()
             elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:  # Pausing/ unpausing
+                    paused = not paused
+                    if paused:
+                        pygame.mixer.music.pause()
+                    else:
+                        pygame.mixer.music.unpause()
                 # Choose direction by user input, block opposite directions
                 key_right = event.key in (pygame.K_RIGHT, pygame.K_d)
                 key_left = event.key in (pygame.K_LEFT, pygame.K_a)
                 key_down = event.key in (pygame.K_DOWN, pygame.K_s)
                 key_up = event.key in (pygame.K_UP, pygame.K_w)
-                if key_right and direction != "LEFT":
-                    direction = "RIGHT"
-                elif key_left and direction != "RIGHT":
-                    direction = "LEFT"
-                elif key_down and direction != "UP":
-                    direction = "DOWN"
-                elif key_up and direction != "DOWN":
-                    direction = "UP"
+                if key_right and direction != "L":
+                    direction = "R"
+                elif key_left and direction != "R":
+                    direction = "L"
+                elif key_down and direction != "U":
+                    direction = "D"
+                elif key_up and direction != "D":
+                    direction = "U"
                 elif event.key == pygame.K_ESCAPE:
                     quiting()  # It will quit when esc is pressed
+
         # Simulates the snake movement(together with snake_body_pop)
-        if direction == "RIGHT":
-            snake_position[0] += 10
-        elif direction == "LEFT":
-            snake_position[0] -= 10
-        elif direction == "DOWN":
-            snake_position[1] += 10
-        elif direction == "UP":
-            snake_position[1] -= 10
-        # Body mechanics
-        snake_body.appendleft(list(snake_position))
-        if snake_position == collections.deque(food_position):
-            score += 1  # Every food taken will raise the score by 1
-            game_sound(1)
-            food_spawn = False  # It removes the food from the board
-        else:
-            # If the food is taken it will not remove the last body piece(raising snakes size)
-            snake_body.pop()
-        if food_spawn is False:  # When a food is taken it will respawn randomly
-            food_position = [random.randrange(1, 72) * 10, random.randrange(1, 46) * 10]
-        food_spawn = True  # It will set the food to True again, to keep the cycle
-        # Drawing
-        player_screen.fill(grey)  # Set the background to grey
-        for position in snake_body:  # Snake representation on the screen
-            pygame.draw.rect(player_screen, green, pygame.Rect(position[0], position[1], 10, 10))
-        # Food representation on the screen
-        pygame.draw.rect(player_screen, orange, pygame.Rect(food_position[0], food_position[1], 10, 10))
-        if snake_position[0] not in range(0, 711) or snake_position[1] not in range(0, 451):
-            you_lose()  # Game over when the Snake hit a wall
-        for block in itertools.islice(snake_body, 1, None):
-            if snake_position == collections.deque(block):
-                you_lose()  # Game over when the Snake hits itself
-        pygame.display.flip()  # It constantly updates the screen
-        speed.tick(26)  # It sets the speed to a playable value
+        if not paused:
+            if direction == "R":
+                snake_position[0] += 10
+            elif direction == "L":
+                snake_position[0] -= 10
+            elif direction == "D":
+                snake_position[1] += 10
+            elif direction == "U":
+                snake_position[1] -= 10
+            # Body mechanics
+            snake_body.appendleft(list(snake_position))
+            if snake_position == collections.deque(food_position):
+                score += 1  # Every food taken will raise the score by 1
+                game_sound(1)
+                food_spawn = False  # It removes the food from the board
+            else:
+                # If the food is taken it will not remove the last body piece(raising snakes size)
+                snake_body.pop()
+            if food_spawn is False:  # When a food is taken it will respawn randomly
+                food_position = [random.randrange(1, 72) * 10, random.randrange(1, 46) * 10]
+            food_spawn = True  # It will set the food to True again, to keep the cycle
+            # Drawing
+            player_screen.fill(grey)  # Set the background to grey
+            for position in snake_body:  # Snake representation on the screen
+                pygame.draw.rect(player_screen, green, pygame.Rect(position[0], position[1], 10, 10))
+            # Food representation on the screen
+            pygame.draw.rect(player_screen, orange, pygame.Rect(food_position[0], food_position[1], 10, 10))
+            if snake_position[0] not in range(0, 711) or snake_position[1] not in range(0, 451):
+                you_lose()  # Game over when the Snake hit a wall
+            for block in itertools.islice(snake_body, 1, None):
+                if snake_position == collections.deque(block):
+                    you_lose()  # Game over when the Snake hits itself
+            pygame.display.flip()  # It constantly updates the screen
+            speed.tick(26)  # It sets the speed to a playable value
 
 
 if __name__ == "__main__":
