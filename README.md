@@ -25,4 +25,8 @@ V 1.32 - Changed the variable name fps to speed to avoid confusion, few performa
 
 V 1.38 - Performance boost by changing most of the lists to deque, O(1) vs the previous O(n)
 
-todo - Complete menu skeleton, add difficult settings, add another music options, add buttons, making the path to the songs relative( Im still failing at that)
+V 1.48 - BugFix, relative paths
+
+V 1.59 - Adds pause/ unpausing (pressing p), code slightly more readable, Adds pause menu skeleton
+
+todo - Complete menu skeleton, add difficult settings, add another music options, add buttons, 
