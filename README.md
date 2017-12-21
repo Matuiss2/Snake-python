@@ -29,4 +29,8 @@ V 1.48 - BugFix, relative paths
 
 V 1.59 - Adds pause/ unpausing (pressing p), code slightly more readable, Adds pause menu skeleton
 
+V 1.62 - Most of flask8 recommended changes added
+
+V 1.65 - Most of J_H (thanks for the code review) recommended changes added
+
 todo - Complete menu skeleton, add difficult settings, add another music options, add buttons, 
